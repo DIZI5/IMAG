@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Комплектуючі</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+  <!-- компактна верхня панель -->
+  <header class="topbar">
+    <h1>Комплектуючі</h1>
+    <a href="{% url 'add_product' %}" class="btn btn-primary">＋ Додати товар</a>
+  </header>
+
+
+  <!-- вьюпорт таблиці заповнює весь екран під топбаром -->
+  <div class="table-viewport">
+    <table class="table-production">
+      <colgroup>
+        <col><col><col><col><col><col><col><col><col><col><col>
+      </colgroup>
+
+      <thead>
+        <tr>
+          <th>№ (серійний номер)</th>
+          <th>Система</th>
+          <th>Підсистема</th>
+          <th>Виріб</th>
+          <th>Опис</th>
+          <th>Виробник</th>
+          <th>Модель</th>
+          <th>Кількість</th>
+          <th>Ціна (євро)</th>
+          <th>Контактна особа постачальника, e-mail, tel, site</th>
+          <th>Дії</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for product in products %}
+        <tr>
+          <td>{{ product.pk }}</td>
+          <td></td>
+          <td></td>
+
+          <!-- Виріб -->
+          <td class="cell-clip">
+            <span class="cell-text">{{ product.name }}</span>
+            {% if product.name %}
+            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.name }}</div></div>
+            {% endif %}
+          </td>
+
+          <!-- Опис -->
+          <td class="cell-clip">
+            <span class="cell-text">{{ product.description }}</span>
+            {% if product.description %}
+            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.description }}</div></div>
+            {% endif %}
+          </td>
+
+          <!-- Виробник -->
+          <td class="cell-clip">
+            <span class="cell-text">{{ product.manufacturer }}</span>
+            {% if product.manufacturer %}
+            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.manufacturer }}</div></div>
+            {% endif %}
+          </td>
+
+          <!-- Модель -->
+          <td class="cell-clip">
+            <span class="cell-text">{{ product.model }}</span>
+            {% if product.model %}
+            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.model }}</div></div>
+            {% endif %}
+          </td>
+
+          <td>{{ product.stock }}</td>
+          <td>{{ product.price }}</td>
+
+          <!-- Контакти (в клітинці — ПІБ; у тултіпі — все) -->
+          <td class="cell-clip">
+            <span class="cell-text">{{ product.supplier_contact_person }}</span>
+            {% if product.supplier_contact_person or product.supplier_email or product.supplier_tel or product.supplier_site %}
+            <div class="tooltip" role="tooltip">
+              <div class="tooltip-body">
+                {% if product.supplier_contact_person %}<div>{{ product.supplier_contact_person }}</div>{% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </td>
+
+          <td class="actions">
+            <a href="{% url 'product_edit' product.pk %}" class="btn btn-ghost">Редагувати</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="11" class="empty">Поки що немає товарів</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ПРИКРІПЛЕНИЙ ПІДСУМОК -->
+  <div class="summary-bar" aria-live="polite">
+    <table class="table-production table-summary" aria-label="Підсумок">
+      <colgroup>
+        <col><col><col><col><col><col><col><col><col><col><col>
+      </colgroup>
+      <tbody>
+        <tr>
+          <td class="summary-label" colspan="3">Підсумок</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <!-- ∑ Ціна -->
+          <td class="summary-value">
+            <span id="sum-price">€0.00</span>
+
+            <!-- ціна×к-ть -->
+            
+            <!-- <span id="sum-price">€0.00</span>
+            <span class="summary-sep">·</span>
+            <span id="sum-total">€0.00</span> -->
+            <!-- <span class="summary-note">∑ ціна / ∑(ціна×к-ть)</span> -->
+          </td>
+          <!-- Контакти (порожньо) -->
+          <td></td>
+          <!-- Дії (порожньо) -->
+          <td>
+            <span>//дія//</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="{% static 'js/tooltips.js' %}"></script>
+
+  {% if messages %}
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true">
+    {% for message in messages %}
+      <div class="toast {{ message.tags|default:'info' }}" role="status" data-lifetime="3000">
+        <div class="toast-msg">{{ message }}</div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<script src="{% static 'js/flash.js' %}"></script>
+<script src="{% static 'js/sum-price.js' %}"></script>
+
+</body>
+</html>

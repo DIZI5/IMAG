@@ -1,0 +1,192 @@
+:root { --topbar-h: 56px; --summary-h: 48px; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, "Noto Sans", sans-serif;
+    color: #0f172a;
+    background: #fff;
+}
+
+
+
+
+/* компактна верхня панель */
+.topbar {
+    position: sticky; top: 0; z-index: 3;
+    height: var(--topbar-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 12px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+}
+.topbar h1 { margin: 0; font-size: 18px; font-weight: 700; }
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 12px; border-radius: 8px; font-weight: 600;
+    border: 1px solid transparent; text-decoration: none; cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, transform .04s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-outline { background: #fff; color: #0f172a; border-color: #cbd5e1; }
+.btn-ghost { background: #f1f5f9; color: #0f172a; border-color: #e2e8f0; }
+
+/* вьюпорт таблиці заповнює екран під топбаром */
+.table-viewport {
+    height: calc(100vh - var(--topbar-h));
+    overflow: auto;
+}
+
+
+
+
+/* ===== таблиця ===== */
+.table-production { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+th, td {
+    border: 1px solid #e5e7eb;
+    padding: 8px 10px;
+    vertical-align: middle;
+    height: 44px;                 /* фіксована висота рядка */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+thead th {
+    position: sticky; top: 0;
+    background: #f8fafc; z-index: 2; font-weight: 700;
+}
+tbody tr:hover { background: #fafcff; }
+
+tr, td, th { position: relative; }  /* для тултіпів */
+
+/* ширини колонок */
+.table-production col:nth-child(1)  { width: 4%;  }
+.table-production col:nth-child(2)  { width: 8%;  }
+.table-production col:nth-child(3)  { width: 8%;  }
+.table-production col:nth-child(4)  { width: 18%; }
+.table-production col:nth-child(5)  { width: 20%; }
+.table-production col:nth-child(6)  { width: 10%; }
+.table-production col:nth-child(7)  { width: 10%; }
+.table-production col:nth-child(8)  { width: 4%;  }
+.table-production col:nth-child(9)  { width: 9%;  }
+.table-production col:nth-child(10) { width: 15%; }
+.table-production col:nth-child(11) { width: 8%;  }
+
+.empty { text-align: center; color: #64748b; }
+
+/* ===== узагальнені тултіпи (працюють лише коли текст обрізано) ===== */
+td.cell-clip { position: relative; overflow: visible; }
+td.cell-clip .cell-text { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+td.cell-clip .tooltip{
+    position:absolute; top:100%; left:0;
+    min-width: 280px; max-width: 60vw; max-height: 50vh;
+    padding:10px 12px; background:#fff; border:1px solid #cfcfcf;
+    box-shadow:0 6px 24px rgba(0,0,0,.12); z-index:1000;
+    visibility:hidden; opacity:0; transform:translateY(6px);
+    transition: opacity .15s ease, transform .15s ease, visibility 0s linear .4s; /* затримка 0.4s */
+    transition-delay:0s,0s,.4s; /* миттєве ховання */
+}
+td.cell-clip .tooltip .tooltip-body{ white-space: normal; overflow:auto; max-height:45vh; line-height:1.35; }
+
+/* показувати лише якщо JS додав .trunc */
+td.cell-clip.trunc:hover .tooltip{
+    visibility: visible; opacity: 1; transform: translateY(0);
+    transition-delay: .4s, .4s, 0s;
+}
+
+/* дії в останній колонці */
+.actions { display: flex; gap: 8px; align-items: center; }
+.actions form { display: inline; margin: 0; }
+
+
+
+
+/* ==== Toast флеш-повідомлення (оверлей) ==== */
+.toast-root{
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 9999;                  /* поверх топбару та таблиці */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;           /* не блокує кліки по таблиці під ним */
+}
+
+.toast{
+    min-width: 260px;
+    max-width: 50vw;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid;
+    box-shadow: 0 10px 24px rgba(2,6,23,.12);
+    font-weight: 600;
+    animation: toastIn .18s ease-out both;
+    pointer-events: auto;           /* якщо захочеш додати кнопку “×” */
+}
+
+/* Кольори для різних типів */
+.toast.success{ background:#ecfdf5; border-color:#a7f3d0; color:#065f46; }
+.toast.error  { background:#fef2f2; border-color:#fecaca; color:#991b1b; }
+.toast.warning{ background:#fffbeb; border-color:#fde68a; color:#92400e; }
+.toast.info   { background:#eff6ff; border-color:#bfdbfe; color:#1e40af; }
+
+.toast.hide{ animation: toastOut .22s ease-in forwards; }
+
+@keyframes toastIn{
+    from{ opacity:0; transform: translateY(-8px); }
+    to  { opacity:1; transform: translateY(0); }
+}
+@keyframes toastOut{
+    to{ opacity:0; transform: translateY(-8px); }
+}
+
+
+
+/* щоб рядки внизу не перекривались футером */
+.table-viewport { height: calc(100vh - var(--topbar-h)); overflow: auto; padding-bottom: var(--summary-h); }
+
+/* Фіксований "футер" поверх таблиці */
+.summary-bar{
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 5;
+    background: #f8fafc;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -6px 16px rgba(2,6,23,.06);
+    /* не блокує кліки по таблиці під порожніми місцями */
+    pointer-events: none;
+}
+
+/* власне таблиця підсумку (вирівнюється за colgroup так само, як основна) */
+.table-summary{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* клітинки підсумку — стилістика як у thead, але трохи виразніше */
+.table-summary td{
+    border-left: 1px solid #e5e7eb;
+    height: var(--summary-h);
+    padding: 6px 10px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    vertical-align: middle;
+    background: #f8fafc;
+    pointer-events: auto; /* дозволяє копіювати текст підсумку */
+}
+.table-summary td:first-child{ border-left: none; }
+
+.summary-label{ font-weight: 700; color: #0f172a; }
+
+.summary-value{
+    font-weight: 700;
+    color: #111827;
+    display: flex; align-items: baseline; gap: 8px; 
+}
+.summary-sep{ color: #94a3b8; }

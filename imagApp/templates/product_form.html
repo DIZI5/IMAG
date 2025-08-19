@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if mode == "edit" %}Редагувати товар{% else %}Додати товар{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'css/product_form.css' %}">
+</head>
+<body>
+    <main class="container">
+        <header class="page-header">
+            <h1>{% if mode == "edit" %}Редагувати товар{% else %}Додати товар{% endif %}</h1>
+            <p class="subtitle">Поля з <span class="req">*</span> — обов’язкові</p>
+        </header>
+
+        <section class="card">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}">Виріб <span class="req">*</span></label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.price.id_for_label }}">Ціна (євро) <span class="req">*</span></label>
+                        {{ form.price }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.stock.id_for_label }}">Кількість <span class="req">*</span></label>
+                        {{ form.stock }}
+                    </div>
+
+                    <div class="form-group col-span-2">
+                        <label for="{{ form.description.id_for_label }}">Опис (необов’язково)</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.manufacturer.id_for_label }}">Виробник (необов’язково)</label>
+                        {{ form.manufacturer }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.model.id_for_label }}">Модель (необов’язково)</label>
+                        {{ form.model }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.supplier_contact_person.id_for_label }}">Контактна особа постачальника (необов’язково)</label>
+                        {{ form.supplier_contact_person }}
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">
+                        {% if mode == "edit" %}Зберегти зміни{% else %}Створити{% endif %}
+                    </button>
+
+                    <a href="{% url 'production' %}" class="btn btn-secondary">⬅ Назад до списку</a>
+
+                    {% if mode == "edit" and product %}
+                        <button
+                            type="submit"
+                            class="btn btn-danger"
+                            formaction="{% url 'product_delete' product.pk %}"
+                            formmethod="post"
+                            formnovalidate
+                            onclick="return confirm('Видалити «{{ product.name }}» назавжди?');"
+                        >
+                            Видалити
+                        </button>
+                    {% endif %}
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
