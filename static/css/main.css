@@ -1,38 +1,84 @@
-:root { --topbar-h: 56px; --summary-h: 48px; }
+:root {
+    --topbar-h: 56px;
+    --summary-h: 48px;
+}
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, "Noto Sans", sans-serif;
     color: #0f172a;
     background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, "Noto Sans", sans-serif;
 }
 
 
 
 
-/* компактна верхня панель */
+/* компактна верхня панель з кнопками */
 .topbar {
-    position: sticky; top: 0; z-index: 3;
+    position: sticky;
+    top: 0;
+    z-index: 3;
     height: var(--topbar-h);
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 0 12px;
     background: #f8fafc;
     border-bottom: 1px solid #e5e7eb;
 }
-.topbar h1 { margin: 0; font-size: 18px; font-weight: 700; }
+.topbar h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
 
 .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 8px 12px; border-radius: 8px; font-weight: 600;
-    border: 1px solid transparent; text-decoration: none; cursor: pointer;
+    display: inline-flex;
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
     transition: background .15s ease, border-color .15s ease, transform .04s ease;
 }
-.btn:active { transform: translateY(1px); }
-.btn-primary { background: #2563eb; color: #fff; }
-.btn-outline { background: #fff; color: #0f172a; border-color: #cbd5e1; }
-.btn-ghost { background: #f1f5f9; color: #0f172a; border-color: #e2e8f0; }
+.btn:hover {
+    filter: brightness(1.09);
+}
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, #3075e5, #1c56d4);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, .25);
+    color: #fff;
+}
+
+.btn-return {
+    margin-right: 10px;
+}
+
+.btn-outline {
+    background: #fff;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.btn-edit {
+    background: #456cc0;
+    color: #fff;
+}
 
 /* вьюпорт таблиці заповнює екран під топбаром */
 .table-viewport {
@@ -44,10 +90,14 @@ body {
 
 
 /* ===== таблиця ===== */
-.table-production { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.table-production {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
 
 th, td {
-    border: 1px solid #e5e7eb;
+    border: 1px solid #dedede; /* колір рамок таблиці */
     padding: 8px 10px;
     vertical-align: middle;
     height: 44px;                 /* фіксована висота рядка */
@@ -55,16 +105,28 @@ th, td {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-thead th {
-    position: sticky; top: 0;
-    background: #f8fafc; z-index: 2; font-weight: 700;
-}
-tbody tr:hover { background: #fafcff; }
 
-tr, td, th { position: relative; }  /* для тултіпів */
+thead th {
+    position: sticky;
+    top: 0;
+    background: #1f1f1f;
+    z-index: 2;
+    font-weight: 700;
+    color: #f8fafc;
+    height: 88px; /* висота рядка з назвами */
+}
+
+/* зміна кольора рядка при ховері */
+tbody tr:hover {
+    background: #f0f1f5;
+}
+
+tr, td, th {
+    position: relative;
+}  /* для тултіпів */
 
 /* ширини колонок */
-.table-production col:nth-child(1)  { width: 4%;  }
+.table-production col:nth-child(1)  { width: 6%;  }
 .table-production col:nth-child(2)  { width: 8%;  }
 .table-production col:nth-child(3)  { width: 8%;  }
 .table-production col:nth-child(4)  { width: 18%; }
@@ -76,32 +138,70 @@ tr, td, th { position: relative; }  /* для тултіпів */
 .table-production col:nth-child(10) { width: 15%; }
 .table-production col:nth-child(11) { width: 8%;  }
 
-.empty { text-align: center; color: #64748b; }
+.empty {
+    text-align: center;
+    color: #64748b;
+}
 
 /* ===== узагальнені тултіпи (працюють лише коли текст обрізано) ===== */
-td.cell-clip { position: relative; overflow: visible; }
-td.cell-clip .cell-text { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+td.cell-clip {
+    position: relative;
+    overflow: visible;
+}
+
+td.cell-clip .cell-text {
+    display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
 
 td.cell-clip .tooltip{
-    position:absolute; top:100%; left:0;
-    min-width: 280px; max-width: 60vw; max-height: 50vh;
-    padding:10px 12px; background:#fff; border:1px solid #cfcfcf;
-    box-shadow:0 6px 24px rgba(0,0,0,.12); z-index:1000;
-    visibility:hidden; opacity:0; transform:translateY(6px);
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width: 280px;
+    max-width: 60vw;
+    max-height: 50vh;
+    padding:10px 12px;
+    background:#fff;
+    border:1px solid #cfcfcf;
+    box-shadow:0 6px 24px rgba(0,0,0,.12);
+    z-index:1000;
+    visibility:hidden;
+    opacity:0;
+    transform:translateY(6px);
     transition: opacity .15s ease, transform .15s ease, visibility 0s linear .4s; /* затримка 0.4s */
-    transition-delay:0s,0s,.4s; /* миттєве ховання */
+    transition-delay:0s, 0s, .4s; /* миттєве ховання */
 }
-td.cell-clip .tooltip .tooltip-body{ white-space: normal; overflow:auto; max-height:45vh; line-height:1.35; }
 
-/* показувати лише якщо JS додав .trunc */
-td.cell-clip.trunc:hover .tooltip{
-    visibility: visible; opacity: 1; transform: translateY(0);
-    transition-delay: .4s, .4s, 0s;
+/* перенос рядків у тултіпі як у "Описі" (зберігаємо \n, дозволяємо перенос) */
+td.cell-clip .tooltip .tooltip-body{
+    white-space: pre-wrap;     /* було: normal */
+    overflow: auto;
+    max-height: 45vh;
+    line-height: 1.35;
+}
+
+/* показ тултіпу тепер керується класом .open (НЕ :hover) */
+td.cell-clip.open .tooltip{
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: .4s, .4s, 0s; /* 0.4s ховер-холд */
 }
 
 /* дії в останній колонці */
-.actions { display: flex; gap: 8px; align-items: center; }
-.actions form { display: inline; margin: 0; }
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.actions form {
+    display: inline;
+    margin: 0;
+}
 
 
 
@@ -109,7 +209,7 @@ td.cell-clip.trunc:hover .tooltip{
 /* ==== Toast флеш-повідомлення (оверлей) ==== */
 .toast-root{
     position: fixed;
-    top: 12px;
+    top: 8px;
     right: 12px;
     z-index: 9999;                  /* поверх топбару та таблиці */
     display: flex;
@@ -121,6 +221,9 @@ td.cell-clip.trunc:hover .tooltip{
 .toast{
     min-width: 260px;
     max-width: 50vw;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
     padding: 10px 12px;
     border-radius: 10px;
     border: 1px solid;
@@ -149,7 +252,11 @@ td.cell-clip.trunc:hover .tooltip{
 
 
 /* щоб рядки внизу не перекривались футером */
-.table-viewport { height: calc(100vh - var(--topbar-h)); overflow: auto; padding-bottom: var(--summary-h); }
+.table-viewport {
+    height: calc(100vh - var(--topbar-h));
+    overflow: auto;
+    padding-bottom: var(--summary-h);
+}
 
 /* Фіксований "футер" поверх таблиці */
 .summary-bar{
@@ -180,13 +287,20 @@ td.cell-clip.trunc:hover .tooltip{
     background: #f8fafc;
     pointer-events: auto; /* дозволяє копіювати текст підсумку */
 }
-.table-summary td:first-child{ border-left: none; }
 
-.summary-label{ font-weight: 700; color: #0f172a; }
+.table-summary td:first-child{
+    border-left: none;
+}
+
+.summary-label{
+    font-weight: 700;
+    color: #0f172a;
+}
 
 .summary-value{
     font-weight: 700;
     color: #111827;
     display: flex; align-items: baseline; gap: 8px; 
 }
+
 .summary-sep{ color: #94a3b8; }

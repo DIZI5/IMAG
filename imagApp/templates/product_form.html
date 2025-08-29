@@ -20,18 +20,43 @@
 
                 <div class="grid">
                     <div class="form-group">
+                        <label for="{{ form.serial_number.id_for_label }}">Серійний номер <span class="req">*</span></label>
+                        {{ form.serial_number }}
+                        {% if form.serial_number.errors %}
+                            <ul class="errorlist">
+                                {% for e in form.serial_number.errors %}<li>{{ e }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
                         <label for="{{ form.name.id_for_label }}">Виріб <span class="req">*</span></label>
                         {{ form.name }}
+                        {% if form.name.errors %}
+                            <ul class="errorlist">
+                                {% for e in form.name.errors %}<li>{{ e }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
 
                     <div class="form-group">
                         <label for="{{ form.price.id_for_label }}">Ціна (євро) <span class="req">*</span></label>
                         {{ form.price }}
+                        {% if form.price.errors %}
+                            <ul class="errorlist">
+                                {% for e in form.price.errors %}<li>{{ e }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
 
                     <div class="form-group">
                         <label for="{{ form.stock.id_for_label }}">Кількість <span class="req">*</span></label>
                         {{ form.stock }}
+                        {% if form.stock.errors %}
+                            <ul class="errorlist">
+                                {% for e in form.stock.errors %}<li>{{ e }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
 
                     <div class="form-group col-span-2">
@@ -44,14 +69,14 @@
                         {{ form.manufacturer }}
                     </div>
 
+                    <div class="form-group kontact-textarea">
+                        <label for="{{ form.supplier_contact.id_for_label }}">Контактна особа постачальника (необов’язково)</label>
+                        {{ form.supplier_contact }}
+                    </div>
+                    
                     <div class="form-group">
                         <label for="{{ form.model.id_for_label }}">Модель (необов’язково)</label>
                         {{ form.model }}
-                    </div>
-
-                    <div class="form-group">
-                        <label for="{{ form.supplier_contact_person.id_for_label }}">Контактна особа постачальника (необов’язково)</label>
-                        {{ form.supplier_contact_person }}
                     </div>
                 </div>
 
@@ -78,5 +103,17 @@
             </form>
         </section>
     </main>
+
+    {% if messages %}
+        <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true">
+            {% for message in messages %}
+            <div class="toast {{ message.tags|default:'info' }}" role="status">
+                <div class="toast-msg">{{ message }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <script src="{% static 'js/flash.js' %}"></script>
 </body>
 </html>

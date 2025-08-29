@@ -49,6 +49,10 @@ select {
 }
 textarea { resize: vertical; min-height: 110px; }
 
+.kontact-textarea textarea {
+    min-height: 44px;
+}
+
 input:focus, textarea:focus, select:focus {
     border-color: #3b82f6;                          /* blue-500 */
     box-shadow: 0 0 0 4px rgba(59,130,246,.15);
@@ -56,6 +60,49 @@ input:focus, textarea:focus, select:focus {
 
 /* Помилки від Django */
 ul.errorlist { margin: 4px 0 0; padding-left: 18px; color: #b91c1c; font-size: 13px; } /* red-700 */
+
+/* ==== Toast флеш-повідомлення (оверлей) ==== */
+.toast-root{
+    position: fixed;
+    top: 8px;
+    right: 12px;
+    z-index: 9999;                  /* поверх топбару та таблиці */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;           /* не блокує кліки по таблиці під ним */
+}
+
+.toast{
+    min-width: 260px;
+    max-width: 50vw;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid;
+    box-shadow: 0 10px 24px rgba(2,6,23,.12);
+    font-weight: 600;
+    animation: toastIn .18s ease-out both;
+    pointer-events: auto;           /* якщо захочеш додати кнопку “×” */
+}
+
+/* Кольори для різних типів */
+.toast.success{ background:#ecfdf5; border-color:#a7f3d0; color:#065f46; }
+.toast.error  { background:#fef2f2; border-color:#fecaca; color:#991b1b; }
+.toast.warning{ background:#fffbeb; border-color:#fde68a; color:#92400e; }
+.toast.info   { background:#eff6ff; border-color:#bfdbfe; color:#1e40af; }
+
+.toast.hide{ animation: toastOut .22s ease-in forwards; }
+
+@keyframes toastIn{
+    from{ opacity:0; transform: translateY(-8px); }
+    to  { opacity:1; transform: translateY(0); }
+}
+@keyframes toastOut{
+    to{ opacity:0; transform: translateY(-8px); }
+}
 
 /* ===== Кнопки ===== */
 .actions { margin-top: 18px; display: flex; gap: 12px; align-items: center; }
