@@ -9,7 +9,9 @@
 <body>
   <!-- компактна верхня панель -->
   <header class="topbar">
-    <h1>Комплектуючі</h1>
+    <h1>
+      <a class="btn btn-primary btn-return" href="../">Return</a>
+        Комплектуючі</h1>
     <a href="{% url 'add_product' %}" class="btn btn-primary">＋ Додати товар</a>
   </header>
 
@@ -40,7 +42,7 @@
       <tbody>
         {% for product in products %}
         <tr>
-          <td>{{ product.pk }}</td>
+          <td>{{ product.serial_number }}</td>
           <td></td>
           <td></td>
 
@@ -54,7 +56,7 @@
 
           <!-- Опис -->
           <td class="cell-clip">
-            <span class="cell-text">{{ product.description }}</span>
+            <span class="cell-text">{{ product.description|default_if_none:"" }}</span>
             {% if product.description %}
             <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.description }}</div></div>
             {% endif %}
@@ -62,7 +64,7 @@
 
           <!-- Виробник -->
           <td class="cell-clip">
-            <span class="cell-text">{{ product.manufacturer }}</span>
+            <span class="cell-text">{{ product.manufacturer|default_if_none:"" }}</span>
             {% if product.manufacturer %}
             <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.manufacturer }}</div></div>
             {% endif %}
@@ -70,7 +72,7 @@
 
           <!-- Модель -->
           <td class="cell-clip">
-            <span class="cell-text">{{ product.model }}</span>
+            <span class="cell-text">{{ product.model|default_if_none:"" }}</span>
             {% if product.model %}
             <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.model }}</div></div>
             {% endif %}
@@ -79,20 +81,16 @@
           <td>{{ product.stock }}</td>
           <td>{{ product.price }}</td>
 
-          <!-- Контакти (в клітинці — ПІБ; у тултіпі — все) -->
+          <!-- Контакти -->
           <td class="cell-clip">
-            <span class="cell-text">{{ product.supplier_contact_person }}</span>
-            {% if product.supplier_contact_person or product.supplier_email or product.supplier_tel or product.supplier_site %}
-            <div class="tooltip" role="tooltip">
-              <div class="tooltip-body">
-                {% if product.supplier_contact_person %}<div>{{ product.supplier_contact_person }}</div>{% endif %}
-              </div>
-            </div>
+            <span class="cell-text">{{ product.supplier_contact|default_if_none:"" }}</span>
+            {% if product.supplier_contact %}
+            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.supplier_contact }}</div></div>
             {% endif %}
           </td>
 
           <td class="actions">
-            <a href="{% url 'product_edit' product.pk %}" class="btn btn-ghost">Редагувати</a>
+            <a href="{% url 'product_edit' product.pk %}" class="btn btn-edit">Редагувати</a>
           </td>
         </tr>
         {% empty %}
@@ -143,7 +141,7 @@
   {% if messages %}
   <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true">
     {% for message in messages %}
-      <div class="toast {{ message.tags|default:'info' }}" role="status" data-lifetime="3000">
+      <div class="toast {{ message.tags|default:'info' }}" role="status">
         <div class="toast-msg">{{ message }}</div>
       </div>
     {% endfor %}

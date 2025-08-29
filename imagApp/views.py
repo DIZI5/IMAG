@@ -15,7 +15,10 @@ def add_product(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, "Товар успішно додано!")  # Додаємо повідомлення
             return redirect("production")
+        else:
+            messages.error(request, "Виникла помилка. Перевірте дані.")
     else:
         form = ProductForm()
     return render(request, "product_form.html", {"form": form, "mode": "add"})
@@ -26,7 +29,10 @@ def product_edit(request, pk):
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
+            messages.info(request, "Зміни збережено.")  # Додаємо повідомлення
             return redirect("production")
+        else:
+            messages.error(request, "Виникла помилка. Перевірте дані.")
     else:
         form = ProductForm(instance=product)
     return render(request, "product_form.html", {"form": form, "mode": "edit", "product": product})
@@ -41,7 +47,5 @@ def product_delete(request, pk):
     # якщо GET — окрема сторінка підтвердження (за бажанням)
     return render(request, "product_confirm_delete.html", {"product": product})
 
-
-
 def print_3d(request):
-    return render(request, 'print_3d.html')
+    return render(request, 'print.html')
