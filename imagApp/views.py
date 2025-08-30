@@ -29,7 +29,7 @@ def product_edit(request, pk):
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
-            messages.info(request, "Зміни збережено.")  # Додаємо повідомлення
+            messages.info(request, "Зміни збережено")  # Додаємо повідомлення
             return redirect("production")
         else:
             messages.error(request, "Виникла помилка. Перевірте дані.")
@@ -42,7 +42,7 @@ def product_delete(request, pk):
     if request.method == "POST":
         name = product.name
         product.delete()
-        messages.success(request, f'«{name}» успішно видалено.')
+        messages.success(request, f'«{name}» успішно видалено')
         return redirect("production")  # або твоя назва списку
     # якщо GET — окрема сторінка підтвердження (за бажанням)
     return render(request, "product_confirm_delete.html", {"product": product})
