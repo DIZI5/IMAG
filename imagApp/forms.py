@@ -1,10 +1,11 @@
 from django import forms
-from .models import Product
+from .models import Product, ProductGroup
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
+            "group",
             "serial_number",
             "name", "price", "stock",
             "description", "manufacturer", "model",
@@ -25,3 +26,8 @@ class ProductForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"rows": 3}),
             "supplier_contact": forms.Textarea(attrs={"rows": 1}),
         }
+
+class ProductGroupForm(forms.ModelForm):
+    class Meta:
+        model = ProductGroup
+        fields = ["serial_number", "name", "price"]
