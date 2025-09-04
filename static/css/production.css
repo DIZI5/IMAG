@@ -55,6 +55,12 @@
 
 
 /* ===== таблиця ===== */
+.group-row {
+    background: #f3f4f6;
+    font-weight: 600;
+    color: #1e293b;
+}
+
 .table-production {
     width: 100%;
     border-collapse: collapse;
@@ -125,7 +131,7 @@ td.cell-clip .tooltip{
     position:absolute;
     top:100%;
     left:0;
-    min-width: 280px;
+    min-width: auto;
     max-width: 60vw;
     max-height: 50vh;
     padding:10px 12px;
@@ -142,7 +148,13 @@ td.cell-clip .tooltip{
 
 /* перенос рядків у тултіпі як у "Описі" (зберігаємо \n, дозволяємо перенос) */
 td.cell-clip .tooltip .tooltip-body{
-    white-space: pre-wrap;     /* було: normal */
+    white-space: pre-wrap;     /* зберігає нові рядки */
+    word-break: keep-all;      /* не ділити слова */
+    overflow-wrap: normal;     /* не ламати довгі слова автоматично */
+    hyphens: none;             /* без переносів дефісом */
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
+
     overflow: auto;
     max-height: 45vh;
     line-height: 1.35;
@@ -156,20 +168,69 @@ td.cell-clip.open .tooltip{
     transition-delay: .4s, .4s, 0s; /* 0.4s ховер-холд */
 }
 
-/* дії в останній колонці */
-.actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
+/* TD з діями — центр по горизонталі і вертикалі */
+td.actions{
+    display: flex;                 /* робимо TD flex-контейнером */
+    justify-content: center;       /* по центру по горизонталі */
+    align-items: center;           /* по центру по вертикалі */
+    gap: 8px;                      /* відступ між кнопками */
+    padding: 0 8px;
+    flex-wrap: wrap;               /* дозволяємо перенос на малих екранах */
 }
 
-.actions form {
-    display: inline;
+/* елементи всередині не розтягуються */
+td.actions > * {
+    flex: 0 0 auto;
+}
+
+/* форми-кнопки не ламають вирівнювання */
+td.actions form {
     margin: 0;
 }
 
+/* не даємо тексту в кнопках переноситись посередині слова */
+td.actions .btn {
+    white-space: nowrap;
+}
+
+/* трішки компактніше на вузьких екранах */
+@media (max-width: 640px){
+    td.actions { gap: 6px; }
+    td.actions .btn { padding: 6px 10px; font-size: 12px; }
+}
 
 
+
+/* TD з діями — центр по горизонталі і вертикалі */
+.group-actions{
+    display: flex;                 /* робимо TD flex-контейнером */
+    justify-content: right;       /* по центру по горизонталі */
+    align-items: center;           /* по центру по вертикалі */
+    gap: 8px;                      /* відступ між кнопками */
+    padding: 0 8px;
+    flex-wrap: wrap;               /* дозволяємо перенос на малих екранах */
+}
+
+/* елементи всередині не розтягуються */
+.group-actions > * {
+    flex: 0 0 auto;
+}
+
+/* форми-кнопки не ламають вирівнювання */
+.group-actions form {
+    margin: 0;
+}
+
+/* не даємо тексту в кнопках переноситись посередині слова */
+.group-actions .btn {
+    white-space: nowrap;
+}
+
+/* трішки компактніше на вузьких екранах */
+@media (max-width: 640px){
+    .group-actions { gap: 6px; }
+    .group-actions .btn { padding: 6px 10px; font-size: 12px; }
+}
 
 /* щоб рядки внизу не перекривались футером */
 .table-viewport {

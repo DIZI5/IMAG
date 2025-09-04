@@ -3,14 +3,15 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>{% if mode == "edit" %}Редагувати товар{% else %}Додати товар{% endif %}</title>
+    <title>{% if mode == "edit" %}Редагувати групу{% else %}Додати групу{% endif %}</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/product_form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/group_form.css' %}">
 </head>
 <body>
     <main class="container">
         <header class="page-header">
-            <h1>{% if mode == "edit" %}Редагувати товар{% else %}Додати товар{% endif %}</h1>
+            <h1>{% if mode == "edit" %}Редагувати групу{% else %}Додати групу{% endif %}</h1>
             <p class="subtitle">Поля з <span class="req">*</span> — обов’язкові</p>
         </header>
 
@@ -31,7 +32,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ form.name.id_for_label }}">Виріб <span class="req">*</span></label>
+                        <label for="{{ form.name.id_for_label }}">Назва <span class="req">*</span></label>
                         {{ form.name }}
                         {% if form.name.errors %}
                             <ul class="errorlist">
@@ -49,61 +50,13 @@
                             </ul>
                         {% endif %}
                     </div>
-
-                    <div class="form-group">
-                        <label for="{{ form.stock.id_for_label }}">Кількість <span class="req">*</span></label>
-                        {{ form.stock }}
-                        {% if form.stock.errors %}
-                            <ul class="errorlist">
-                                {% for e in form.stock.errors %}<li>{{ e }}</li>{% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-
-                    <div class="form-group col-span-2">
-                        <label for="{{ form.description.id_for_label }}">Опис (необов’язково)</label>
-                        {{ form.description }}
-                    </div>
-
-                    <div class="form-group">
-                        <label for="{{ form.manufacturer.id_for_label }}">Виробник (необов’язково)</label>
-                        {{ form.manufacturer }}
-                    </div>
-
-                    <div class="form-group kontact-textarea">
-                        <label for="{{ form.supplier_contact.id_for_label }}">Контактна особа постачальника (необов’язково)</label>
-                        {{ form.supplier_contact }}
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="{{ form.model.id_for_label }}">Модель (необов’язково)</label>
-                        {{ form.model }}
-                    </div>
-
-                    <div class="form-group" style="display:none;">
-                        {{ form.group }}
-                    </div>
                 </div>
 
                 <div class="actions">
                     <button type="submit" class="btn btn-primary">
                         {% if mode == "edit" %}Зберегти зміни{% else %}Створити{% endif %}
                     </button>
-
                     <a href="{% url 'production' %}" class="btn btn-secondary">⬅ Назад до списку</a>
-
-                    {% if mode == "edit" and product %}
-                        <button
-                            type="submit"
-                            class="btn btn-danger"
-                            formaction="{% url 'product_delete' product.pk %}"
-                            formmethod="post"
-                            formnovalidate
-                            onclick="return confirm('Видалити «{{ product.name }}» назавжди?');"
-                        >
-                            Видалити
-                        </button>
-                    {% endif %}
                 </div>
             </form>
         </section>

@@ -6,6 +6,7 @@
   <title>Комплектуючі</title>
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
   <link rel="stylesheet" href="{% static 'css/production.css' %}">
+  <link rel="icon" href="{% static 'favicon.ico' %}">
 </head>
 <body>
   <!-- компактна верхня панель -->
@@ -13,7 +14,7 @@
     <h1>
       <a class="btn btn-primary btn-return" href="../">Return</a>
         Комплектуючі</h1>
-    <a href="{% url 'add_product' %}" class="btn btn-primary">＋ Додати товар</a>
+    <a href="{% url 'add_group' %}" class="btn btn-primary">＋ Додати/Редагувати групу</a>
   </header>
 
 
@@ -41,61 +42,74 @@
       </thead>
 
       <tbody>
-        {% for product in products %}
-        <tr>
-          <td>{{ product.serial_number }}</td>
-          <td></td>
-          <td></td>
+        {% for item in groups %}
+          {# головний пункт #}
+          <tr class="group-row">
+            <td colspan="1"><b>{{ item.group.serial_number }}</b></td>
+            <td colspan="7">{{ item.group.name }}</td>
+            <td colspan="1">{{ item.group.price }}</td>
+            <td colspan="2" style="padding: 0;">
+              <div class="group-actions">
+                <a href="{% url 'edit_group' item.group.pk %}" class="btn btn-edit">Редагувати</a>
+                <a href="{% url 'add_product' %}?group={{ item.group.pk }}" class="btn btn-primary">＋ Додати підпункт</a>
+              </div>
+            </td>
+          </tr>
+          {# підпункти #}
+          {% for product in item.products %}
+            <tr class="sub-row">
+              <td>{{ product.serial_number }}</td>
+              <td></td>
+              <td></td>
 
-          <!-- Виріб -->
-          <td class="cell-clip">
-            <span class="cell-text">{{ product.name }}</span>
-            {% if product.name %}
-            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.name }}</div></div>
-            {% endif %}
-          </td>
+              <!-- Виріб -->
+              <td class="cell-clip">
+                <span class="cell-text">{{ product.name }}</span>
+                {% if product.name %}
+                <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.name }}</div></div>
+                {% endif %}
+              </td>
 
-          <!-- Опис -->
-          <td class="cell-clip">
-            <span class="cell-text">{{ product.description|default_if_none:"" }}</span>
-            {% if product.description %}
-            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.description }}</div></div>
-            {% endif %}
-          </td>
+              <!-- Опис -->
+              <td class="cell-clip">
+                <span class="cell-text">{{ product.description|default_if_none:"" }}</span>
+                {% if product.description %}
+                <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.description }}</div></div>
+                {% endif %}
+              </td>
 
-          <!-- Виробник -->
-          <td class="cell-clip">
-            <span class="cell-text">{{ product.manufacturer|default_if_none:"" }}</span>
-            {% if product.manufacturer %}
-            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.manufacturer }}</div></div>
-            {% endif %}
-          </td>
+              <!-- Виробник -->
+              <td class="cell-clip">
+                <span class="cell-text">{{ product.manufacturer|default_if_none:"" }}</span>
+                {% if product.manufacturer %}
+                <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.manufacturer }}</div></div>
+                {% endif %}
+              </td>
 
-          <!-- Модель -->
-          <td class="cell-clip">
-            <span class="cell-text">{{ product.model|default_if_none:"" }}</span>
-            {% if product.model %}
-            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.model }}</div></div>
-            {% endif %}
-          </td>
+              <!-- Модель -->
+              <td class="cell-clip">
+                <span class="cell-text">{{ product.model|default_if_none:"" }}</span>
+                {% if product.model %}
+                <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.model }}</div></div>
+                {% endif %}
+              </td>
 
-          <td>{{ product.stock }}</td>
-          <td>{{ product.price }}</td>
+              <td>{{ product.stock }}</td>
+              <td>{{ product.price }}</td>
 
-          <!-- Контакти -->
-          <td class="cell-clip">
-            <span class="cell-text">{{ product.supplier_contact|default_if_none:"" }}</span>
-            {% if product.supplier_contact %}
-            <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.supplier_contact }}</div></div>
-            {% endif %}
-          </td>
+              <!-- Контакти -->
+              <td class="cell-clip">
+                <span class="cell-text">{{ product.supplier_contact|default_if_none:"" }}</span>
+                {% if product.supplier_contact %}
+                <div class="tooltip" role="tooltip"><div class="tooltip-body">{{ product.supplier_contact }}</div></div>
+                {% endif %}
+              </td>
 
-          <td class="actions">
-            <a href="{% url 'product_edit' product.pk %}" class="btn btn-edit">Редагувати</a>
-          </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="11" class="empty">Поки що немає товарів</td></tr>
+              <td class="actions">
+                <a href="{% url 'product_edit' product.pk %}" class="btn btn-edit">Редагувати</a>
+              </td>
+            </tr>
+          {% endfor %}
         {% endfor %}
       </tbody>
     </table>
