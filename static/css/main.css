@@ -72,7 +72,7 @@ body {
 }
 
 /* Кольори для різних типів */
-.toast.success{ background:#ecfdf5; border-color:#a7f3f3; color:#065f46; }
+.toast.success{ background:#ecfdf5; border-color:#62b176; color:#065f46; }
 .toast.error  { background:#fef2f2; border-color:#e8a2a2; color:#991b1b; }
 .toast.warning{ background:#fffbeb; border-color:#fbe072; color:#92400e; }
 .toast.info   { background:#eff6ff; border-color:#267ee9; color:#1e40af; }
