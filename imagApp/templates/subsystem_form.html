@@ -3,14 +3,14 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>{% if mode == "edit" %}Редагувати групу{% else %}Додати групу{% endif %}</title>
+    <title>{% if mode == "edit" %}Редагувати підсистему{% else %}Додати підсистему{% endif %}</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/product_form.css' %}">
 </head>
 <body>
     <main class="container">
         <header class="page-header">
-            <h1>{% if mode == "edit" %}Редагувати групу{% else %}Додати групу{% endif %}</h1>
+            <h1>{% if mode == "edit" %}Редагувати підсистему{% else %}Додати підсистему{% endif %}</h1>
             <p class="subtitle">Поля з <span class="req">*</span> — обов’язкові</p>
         </header>
         <section class="card">
@@ -18,6 +18,15 @@
                 {% csrf_token %}
                 {{ form.non_field_errors }}
                 <div class="grid">
+                    <div class="form-group">
+                        <label for="{{ form.main_group.id_for_label }}">Головна група <span class="req">*</span></label>
+                        {{ form.main_group }}
+                        {% if form.main_group.errors %}
+                            <ul class="errorlist">
+                                {% for e in form.main_group.errors %}<li>{{ e }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
                     <div class="form-group">
                         <label for="{{ form.serial_number.id_for_label }}">Серійний номер <span class="req">*</span></label>
                         {{ form.serial_number }}
@@ -28,11 +37,20 @@
                         {% endif %}
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.name.id_for_label }}">Назва <span class="req">*</span></label>
-                        {{ form.name }}
-                        {% if form.name.errors %}
+                        <label for="{{ form.system.id_for_label }}">Система</label>
+                        {{ form.system }}
+                        {% if form.system.errors %}
                             <ul class="errorlist">
-                                {% for e in form.name.errors %}<li>{{ e }}</li>{% endfor %}
+                                {% for e in form.system.errors %}<li>{{ e }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.subsystem.id_for_label }}">Підсистема</label>
+                        {{ form.subsystem }}
+                        {% if form.subsystem.errors %}
+                            <ul class="errorlist">
+                                {% for e in form.subsystem.errors %}<li>{{ e }}</li>{% endfor %}
                             </ul>
                         {% endif %}
                     </div>

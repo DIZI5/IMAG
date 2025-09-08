@@ -2,50 +2,44 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django import forms
 
-from .models import Product, ProductGroup
-from .forms import ProductForm, ProductGroupForm
-from .utils import serial_sort_key
+from .models import MainGroup, Subsystem, Product
+from .forms import MainGroupForm, SubsystemForm, ProductForm
+from .utils import serial_sort_key_group, serial_sort_key_product
 
 def index(request):
     return render(request, 'index.html')
 
 def production(request):
-    groups = ProductGroup.objects.all().order_by('serial_number')
-    group_list = []
-    for group in groups:
-        products_sorted = sorted(group.products.all(), key=lambda p: serial_sort_key(p.serial_number))
-        group_list.append({
-            "group": group,
-            "products": products_sorted
-        })
-    return render(request, "production.html", {"groups": group_list})
+    groups = sorted(MainGroup.objects.all(), key=lambda g: serial_sort_key_group(g.serial_number))
+    total_sum = sum(group.subsystems_total() for group in groups)
+    return render(request, "production.html", {"groups": groups, "total_sum": total_sum})
 
 def add_product(request):
-    group_id = request.GET.get("group")
+    subsystem_id = request.GET.get("subsystem")
     initial = {}
-    if group_id:
-        initial["group"] = group_id
+    if subsystem_id:
+        initial["subsystem"] = subsystem_id
     if request.method == "POST":
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Товар успішно додано!")
+            messages.success(request, "Підпункт успішно додано!")
             return redirect("production")
         else:
             messages.error(request, "Виникла помилка. Перевірте дані.")
     else:
         form = ProductForm(initial=initial)
-        if group_id:
-            form.fields["group"].widget = forms.HiddenInput()
+        if subsystem_id:
+            form.fields["subsystem"].widget = forms.HiddenInput()
     return render(request, "product_form.html", {"form": form, "mode": "add"})
 
-def product_edit(request, pk):
+def edit_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
-            messages.info(request, "Зміни збережено")  # Додаємо повідомлення
+            messages.info(request, "Зміни збережено")
             return redirect("production")
         else:
             messages.error(request, "Виникла помилка. Перевірте дані.")
@@ -59,16 +53,13 @@ def product_delete(request, pk):
         name = product.name
         product.delete()
         messages.success(request, f'«{name}» успішно видалено')
-        return redirect("production")  # або твоя назва списку
-    # якщо GET — окрема сторінка підтвердження (за бажанням)
+        return redirect("production")
     return render(request, "product_confirm_delete.html", {"product": product})
 
-def print_3d(request):
-    return render(request, 'print.html')
 
 def add_group(request):
     if request.method == "POST":
-        form = ProductGroupForm(request.POST)
+        form = MainGroupForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Групу успішно додано!")
@@ -76,13 +67,13 @@ def add_group(request):
         else:
             messages.error(request, "Виникла помилка. Перевірте дані.")
     else:
-        form = ProductGroupForm()
+        form = MainGroupForm()
     return render(request, "group_form.html", {"form": form, "mode": "add"})
 
 def edit_group(request, pk):
-    group = get_object_or_404(ProductGroup, pk=pk)
+    group = get_object_or_404(MainGroup, pk=pk)
     if request.method == "POST":
-        form = ProductGroupForm(request.POST, instance=group)
+        form = MainGroupForm(request.POST, instance=group)
         if form.is_valid():
             form.save()
             messages.info(request, "Зміни збережено")
@@ -90,5 +81,35 @@ def edit_group(request, pk):
         else:
             messages.error(request, "Виникла помилка. Перевірте дані.")
     else:
-        form = ProductGroupForm(instance=group)
+        form = MainGroupForm(instance=group)
     return render(request, "group_form.html", {"form": form, "mode": "edit", "group": group})
+
+def add_subsystem(request):
+    if request.method == "POST":
+        form = SubsystemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Підсистему успішно додано!")
+            return redirect("production")
+        else:
+            messages.error(request, "Виникла помилка. Перевірте дані.")
+    else:
+        form = SubsystemForm()
+    return render(request, "subsystem_form.html", {"form": form, "mode": "add"})
+
+def edit_subsystem(request, pk):
+    subsystem = get_object_or_404(Subsystem, pk=pk)
+    if request.method == "POST":
+        form = SubsystemForm(request.POST, instance=subsystem)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Підсистему оновлено!")
+            return redirect("production")
+        else:
+            messages.error(request, "Виникла помилка. Перевірте дані.")
+    else:
+        form = SubsystemForm(instance=subsystem)
+    return render(request, "subsystem_form.html", {"form": form, "mode": "edit", "subsystem": subsystem})
+
+def print_3d(request):
+    return render(request, 'print.html')

@@ -20,6 +20,10 @@
                 {{ form.non_field_errors }}
 
                 <div class="grid">
+                    <div class="form-group" style="display:none;">
+                        {{ form.subsystem }}
+                    </div>
+                    
                     <div class="form-group">
                         <label for="{{ form.serial_number.id_for_label }}">Серійний номер <span class="req">*</span></label>
                         {{ form.serial_number }}

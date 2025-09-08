@@ -56,7 +56,13 @@
 
 /* ===== таблиця ===== */
 .group-row {
-    background: #f3f4f6;
+    background: #e2e2e4;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.subsystem-row {
+    background: #eeeef0;
     font-weight: 600;
     color: #1e293b;
 }
@@ -173,8 +179,6 @@ td.actions{
     display: flex;                 /* робимо TD flex-контейнером */
     justify-content: center;       /* по центру по горизонталі */
     align-items: center;           /* по центру по вертикалі */
-    gap: 8px;                      /* відступ між кнопками */
-    padding: 0 8px;
     flex-wrap: wrap;               /* дозволяємо перенос на малих екранах */
 }
 
@@ -195,8 +199,7 @@ td.actions .btn {
 
 /* трішки компактніше на вузьких екранах */
 @media (max-width: 640px){
-    td.actions { gap: 6px; }
-    td.actions .btn { padding: 6px 10px; font-size: 12px; }
+    td.actions .btn { font-size: 12px; }
 }
 
 

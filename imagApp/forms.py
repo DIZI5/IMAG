@@ -1,33 +1,33 @@
 from django import forms
-from .models import Product, ProductGroup
+from .models import MainGroup, Subsystem, Product
+
+class MainGroupForm(forms.ModelForm):
+    class Meta:
+        model = MainGroup
+        fields = ["serial_number", "name"]
+
+class SubsystemForm(forms.ModelForm):
+    class Meta:
+        model = Subsystem
+        fields = ["main_group", "serial_number", "system", "subsystem"]
+        labels = {
+            "main_group": "Головна група",
+            "serial_number": "Серійний номер",
+            "system": "Система (необов’язково)",
+            "subsystem": "Підсистема (необов’язково)",
+        }
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
-            "group",
+            "subsystem",
             "serial_number",
-            "name", "price", "stock",
-            "description", "manufacturer", "model",
+            "name",
+            "price",
+            "stock",
+            "description",
+            "manufacturer",
+            "model",
             "supplier_contact",
         ]
-        labels = {
-            "serial_number": "Серійний номер",
-            "name": "Виріб",
-            "price": "Ціна (євро)",
-            "stock": "Кількість",
-            "description": "Опис (необов’язково)",
-            "manufacturer": "Виробник (необов’язково)",
-            "model": "Модель (необов’язково)",
-            "supplier_contact": "Контактна особа постачальника (необов’язково)",
-
-        }
-        widgets = {
-            "description": forms.Textarea(attrs={"rows": 3}),
-            "supplier_contact": forms.Textarea(attrs={"rows": 1}),
-        }
-
-class ProductGroupForm(forms.ModelForm):
-    class Meta:
-        model = ProductGroup
-        fields = ["serial_number", "name", "price"]
